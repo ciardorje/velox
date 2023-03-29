@@ -122,3 +122,45 @@ VeloxRaster$methods(meanFocal = function(weights, bands=1) {
     rasterbands[[i]] <<- meanfocal_cpp(rasterbands[[i]], weights=weights, wrow=nrow(weights), wcol=ncol(weights), band=i)
   }
 })
+
+#' @title Max focal
+#'
+#' @name VeloxRaster_maxFocal
+#'
+#' @description
+#' Applies a max filter of dimension \code{wcol x wrow} to a VeloxRaster.
+#'
+#' @details
+#' Padding is currently not implemented.
+#'
+#' @param wrow y dimension of filter. Must be uneven integer.
+#' @param wcol x dimension of filter. Must be uneven integer.
+#' @param bands Numeric vector indicating bands where filter is applied.
+#'
+#' @return Void.
+#'
+#' @examples
+#' ## Make VeloxRaster with two bands
+#' mat1 <- matrix(1:100, 10, 10)
+#' mat2 <- matrix(100:1, 10, 10)
+#' vx <- velox(list(mat1, mat2), extent=c(0,1,0,1), res=c(0.1,0.1),
+#'             crs="+proj=longlat +datum=WGS84 +no_defs")
+#' ## max focal
+#' vx$maxFocal(wrow=5, wcol=5, bands=c(1,2))
+#'
+NULL
+VeloxRaster$methods(maxFocal = function(weights, bands=1) {
+  "See \\code{\\link{VeloxRaster_maxFocal}}."
+  if (any(!(bands %in% 1:nbands))) {
+    stop(paste("VeloxRaster only has", nbands, "bands."))
+  }
+  wrow <- dim(weights)[1]
+  wcol <- dim(weights)[2]
+  if (wrow < 0 | wcol < 0 | (wrow %% 2) == 0 | (wcol %% 2) == 0) {
+    stop(paste("The dimensions of the weights matrix must be uneven."))
+  }
+  for (i in bands) {
+    rasterbands[[i]] <<- maxfocal_cpp(rasterbands[[i]], weights=weights, wrow=nrow(weights), wcol=ncol(weights), band=i)
+  }
+})
+
