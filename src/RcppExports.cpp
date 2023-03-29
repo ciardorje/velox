@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // aggregate_cpp
 List aggregate_cpp(List rasterbands, NumericVector dim, NumericVector res, NumericVector factor, int aggtype);
 RcppExport SEXP _velox_aggregate_cpp(SEXP rasterbandsSEXP, SEXP dimSEXP, SEXP resSEXP, SEXP factorSEXP, SEXP aggtypeSEXP) {
@@ -74,6 +79,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type wcol(wcolSEXP);
     Rcpp::traits::input_parameter< int >::type band(bandSEXP);
     rcpp_result_gen = Rcpp::wrap(meanfocal_cpp(rasterband, weights, wrow, wcol, band));
+    return rcpp_result_gen;
+END_RCPP
+}
+// maxfocal_cpp
+NumericMatrix maxfocal_cpp(NumericMatrix rasterband, NumericMatrix weights, int wrow, int wcol, int band);
+RcppExport SEXP _velox_maxfocal_cpp(SEXP rasterbandSEXP, SEXP weightsSEXP, SEXP wrowSEXP, SEXP wcolSEXP, SEXP bandSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type rasterband(rasterbandSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< int >::type wrow(wrowSEXP);
+    Rcpp::traits::input_parameter< int >::type wcol(wcolSEXP);
+    Rcpp::traits::input_parameter< int >::type band(bandSEXP);
+    rcpp_result_gen = Rcpp::wrap(maxfocal_cpp(rasterband, weights, wrow, wcol, band));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -197,6 +217,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_velox_medianfocal_cpp", (DL_FUNC) &_velox_medianfocal_cpp, 4},
     {"_velox_sumfocal_cpp", (DL_FUNC) &_velox_sumfocal_cpp, 5},
     {"_velox_meanfocal_cpp", (DL_FUNC) &_velox_meanfocal_cpp, 5},
+    {"_velox_maxfocal_cpp", (DL_FUNC) &_velox_maxfocal_cpp, 5},
     {"_velox_hittest_cpp", (DL_FUNC) &_velox_hittest_cpp, 7},
     {"_velox_unhit_cpp", (DL_FUNC) &_velox_unhit_cpp, 4},
     {"_velox_im2col_cpp", (DL_FUNC) &_velox_im2col_cpp, 10},
