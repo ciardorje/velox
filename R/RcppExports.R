@@ -21,6 +21,10 @@ meanfocal_cpp <- function(rasterband, weights, wrow, wcol, band) {
     .Call('_velox_meanfocal_cpp', PACKAGE = 'velox', rasterband, weights, wrow, wcol, band)
 }
 
+maxfocal_cpp <- function(rasterband, weights, wrow, wcol, band) {
+    .Call('_velox_maxfocal_cpp', PACKAGE = 'velox', rasterband, weights, wrow, wcol, band)
+}
+
 hittest_cpp <- function(rasterbands, dim, extent, res, polyX, polyY, polyCorners) {
     .Call('_velox_hittest_cpp', PACKAGE = 'velox', rasterbands, dim, extent, res, polyX, polyY, polyCorners)
 }
